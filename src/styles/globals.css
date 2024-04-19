@@ -92,7 +92,7 @@ h1{
   border: none;
 }
 
-.section3>.page-buttons>.icon-btn:hover,:active{
+.section3>.page-buttons>.icon-btn:hover{
   color: #fff;
   background-color: orangered;
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import Head from "next/head";
+import DummyData from '../../components/DummyData'
 
 const dialogbox = () => {
   return (
