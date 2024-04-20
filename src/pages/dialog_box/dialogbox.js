@@ -1,8 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import Head from "next/head";
-import DummyData from '../../components/DummyData'
+import DummyData from "../../components/DummyData";
 
 const dialogbox = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5); //5rows per page by default
+
+  // Calculate current items based on current page
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = DummyData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1); //back to first page when changing number of rows
+    }
+  };
+
+  const handleNextPage = () => {
+    if (indexOfLastItem < DummyData.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePageClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const increaseRowsPerPage = () => {
+    setItemsPerPage(itemsPerPage + 1);
+    setCurrentPage(1);
+  };
+
+  const decreaseRowsPerPage = () => {
+    if (itemsPerPage > 1) {
+      setItemsPerPage(itemsPerPage - 1);
+      setCurrentPage(1);
+    }
+  };
+
   return (
     <>
       <Head>
@@ -13,17 +49,16 @@ const dialogbox = () => {
         />
       </Head>
       <div className="main">
-        <div className="section1">
-          <h1 className="title">Recently Generated Reports</h1>
-          <div className="head-buttons">
-            <button class="icon-btn">
-              <i class="fas fa-filter"></i>
-            </button>
-            <button class="icon-btn">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
+        <h1 className="title">Recently Generated Reports</h1>
+        <div className="head-buttons">
+          <button className="icon-btn">
+            <i className="fas fa-filter"></i>
+          </button>
+          <button className="icon-btn">
+            <i className="fas fa-times"></i>
+          </button>
         </div>
+
         <div className="section2">
           <table>
             <thead>
@@ -34,63 +69,67 @@ const dialogbox = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="date-time">
-                  <div className="date">monday 12th</div>
-                  <div className="time">12:00 PM</div>
-                </td>
-                <td> create mode 100644 src/pages/about.js</td>
-                <td>
-                  <button class="icon-btn">
-                    <i class="fas fa-download" className="download-button"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td className="date-time">
-                  <div className="date">monday 12th</div>
-                  <div className="time">12:00 PM</div>
-                </td>
-                <td>master 706fa2c initial commit</td>
-                <td>
-                  <button class="icon-btn" className="download-button">
-                    <i class="fas fa-download"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td className="date-time">
-                  <div className="date">monday 12th</div>
-                  <div className="time">12:00 PM</div>
-                </td>
-                <td>PS D:\desktop\nextjs\my-app</td>
-                <td>
-                  <button class="icon-btn">
-                    <i class="fas fa-download" className="download-button"></i>
-                  </button>
-                </td>
-              </tr>
+              {currentItems.map((item) => (
+                <tr key={item.index}>
+                  <td className="date-time">
+                    <div className="date">{item.date}</div>
+                    <div className="time">{item.time}</div>
+                  </td>
+                  <td>{item.name}</td>
+                  <td>
+                    <button className="icon-btn">
+                      <i className="fas fa-download"></i>
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
+
         <div className="section3">
           <div className="page-buttons">
-            <button class="prev-btn">
-              <i class="fas fa-angle-left"></i> Prev
+            <button
+              className="prev-btn"
+              onClick={handlePreviousPage}
+              disabled={currentPage === 1}
+            >
+              <i className="fas fa-angle-left"></i> Prev
             </button>
-            <button className="icon-btn">1</button>
-            <button className="icon-btn">2</button>
-            <button className="icon-btn">3</button>
-            <button className="icon-btn">4</button>
-            <button className="icon-btn">5</button>
-            <button class="next-btn">
-              Next <i class="fas fa-angle-right"></i>
+            {Array.from(
+              { length: Math.ceil(DummyData.length / itemsPerPage) },
+              (_, i) => (
+                <button
+                  className="icon-btn"
+                  key={i + 1}
+                  onClick={() => handlePageClick(i + 1)}
+                  disabled={i + 1 === currentPage}
+                >
+                  {i + 1}
+                </button>
+              )
+            )}
+            <button
+              className="next-btn"
+              onClick={handleNextPage}
+              disabled={indexOfLastItem >= DummyData.length}
+            >
+              Next <i className="fas fa-angle-right"></i>
             </button>
           </div>
           <div>
-            <button className="icon-btn">
-              <i className="fas fa-list-ul"></i> Rows Per Page
-            </button>
+            <span>Rows per page </span>
+            <span>
+              <button className="icon-btn" onClick={increaseRowsPerPage}>
+                <i className="fas fa-arrow-up"></i>
+              </button>
+            </span>
+            <span> </span>
+            <span>
+              <button className="icon-btn" onClick={decreaseRowsPerPage}>
+                <i className="fas fa-arrow-down"></i>
+              </button>
+            </span>
           </div>
         </div>
       </div>
