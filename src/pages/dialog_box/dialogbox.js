@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Head from "next/head";
 import DummyData from "../../components/DummyData";
 
-const dialogbox = () => {
+const DialogBox = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5); //5rows per page by default
 
@@ -49,16 +49,17 @@ const dialogbox = () => {
         />
       </Head>
       <div className="main">
-        <h1 className="title">Recently Generated Reports</h1>
-        <div className="head-buttons">
-          <button className="icon-btn">
-            <i className="fas fa-filter"></i>
-          </button>
-          <button className="icon-btn">
-            <i className="fas fa-times"></i>
-          </button>
+        <div className="section1">
+          <div className="title">Recently Generated Reports</div>
+          <div className="head-buttons">
+            <button className="icon-btn">
+              <i className="fas fa-filter"></i>
+            </button>
+            <button className="icon-btn">
+              <i className="fas fa-times"></i>
+            </button>
+          </div>
         </div>
-
         <div className="section2">
           <table>
             <thead>
@@ -77,7 +78,7 @@ const dialogbox = () => {
                   </td>
                   <td>{item.name}</td>
                   <td>
-                    <button className="icon-btn">
+                    <button className="download-btn">
                       <i className="fas fa-download"></i>
                     </button>
                   </td>
@@ -96,11 +97,14 @@ const dialogbox = () => {
             >
               <i className="fas fa-angle-left"></i> Prev
             </button>
+            {/* generating number of pages required */}
             {Array.from(
               { length: Math.ceil(DummyData.length / itemsPerPage) },
               (_, i) => (
                 <button
-                  className="icon-btn"
+                  className={`icon-btn ${
+                    currentPage === i + 1 ? "active-page" : "" //giving active button active-page class to make button orangered
+                  }`}
                   key={i + 1}
                   onClick={() => handlePageClick(i + 1)}
                   disabled={i + 1 === currentPage}
@@ -137,4 +141,4 @@ const dialogbox = () => {
   );
 };
 
-export default dialogbox;
+export default DialogBox;

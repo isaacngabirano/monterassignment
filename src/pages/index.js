@@ -1,9 +1,10 @@
+import React from "react";
+import DialogBox from "./dialog_box/dialogbox";
+
 export default function Home() {
   return (
     <>
-      <div>
-        <h1>HOME</h1>
-      </div>
+      <DialogBox />
     </>
   );
 }
